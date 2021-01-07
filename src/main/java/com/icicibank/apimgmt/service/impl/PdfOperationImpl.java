@@ -6,15 +6,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +42,8 @@ import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.border.Border;
@@ -147,64 +150,113 @@ public class PdfOperationImpl implements PdfOperations {
 			// document.add(new AreaBreak(AreaBreakType.NEXT_AREA));
 
 			Paragraph namePg = new Paragraph();
-			namePg.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_name()).addStyle(boldStyle))
-					.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab())
-					.add(new Text("Your Base Branch :").addStyle(boldStyle));
+			
+			namePg.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_name()).addStyle(boldStyle));
+			
+			Paragraph namePg1=new Paragraph();
+			
+			namePg1.add(new Text("Your Base Branch :").addStyle(boldStyle));
+			
+			/*
+			 * if(AccountDetailrequest.getAcctDetails().get(0).getCustomer_name().contains(
+			 * "&")) {
+			 * 
+			 * namePg.add(new
+			 * Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_name()).
+			 * addStyle(boldStyle)) .add(new Tab()).add(new Tab()) .add(new
+			 * Text("Your Base Branch :").addStyle(boldStyle)); }else {
+			 * 
+			 * namePg.add(new
+			 * Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_name()).
+			 * addStyle(boldStyle)) .add(new Tab()).add(new Tab()).add(new Tab()).add(new
+			 * Tab()) .add(new Text("Your Base Branch :").addStyle(boldStyle)); }
+			 */
+			
+			
+			
 			PageSize pageSize = pdfDocument.getDefaultPageSize();
 			float paraX = pdfDocument.getDefaultPageSize().getLeft() + document.getLeftMargin();
 			float paraY = pageSize.getTop() - document.getTopMargin() - TableEventHandler.getTableHeight()
 					- ImageEventHandler.getImageHeight() + 5;
 			namePg.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			namePg1.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
 			logger.info("Para Y val " + paraY);
 			paraY -= 20;
 			document.add(namePg);
+			document.add(namePg1);
 
 			Paragraph p2 = new Paragraph(new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_address1())
 					.addStyle(regularStyle));
-			p2.add(new Tab()).add(new Tab());
-			p2.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_name()).addStyle(regularStyle));
+			/*
+			 * if(AccountDetailrequest.getAcctDetails().get(0).getBranch_name().contains(" "
+			 * )){ p2.add(new Tab()).add(new Tab()); }else { p2.add(new Tab()).add(new
+			 * Tab()).add(new Tab()); }
+			 */
+			
+			Paragraph p21=new Paragraph();
+			//p2.add(new Tab()).add(new Tab());
+			p21.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_name()).addStyle(regularStyle));
 			p2.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			p21.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
 			logger.info("Para Y val " + paraY);
 			paraY -= 12;
 			document.add(p2);
+			document.add(p21);
 
 			Paragraph p3 = new Paragraph(new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_address2())
 					.addStyle(regularStyle));
-			p3.add(new Tab()).add(new Tab()).add(new Tab());
-			p3.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_address1()).addStyle(regularStyle));
+			//p3.add(new Tab()).add(new Tab()).add(new Tab());
+			
+			Paragraph p31=new Paragraph();
+			
+			p31.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_address1()).addStyle(regularStyle));
 			p3.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			p31.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
 			logger.info("Para Y val " + paraY);
 			paraY -= 12;
 			document.add(p3);
-
+			document.add(p31);
 			Paragraph p4 = new Paragraph(
 					new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_City()).addStyle(regularStyle));
-			p4.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
-			p4.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_address2()).addStyle(regularStyle));
+			//p4.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
+			
+			Paragraph p41=new Paragraph();
+			
+			p41.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_address2()).addStyle(regularStyle));
 			p4.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			p41.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
 			logger.info("Para Y val " + paraY);
 			paraY -= 12;
 			document.add(p4);
-
+			document.add(p41);
 			Paragraph p5 = new Paragraph(
 					new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_State()).addStyle(regularStyle));
-			p5.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
-			p5.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_city() + ", "
+			//p5.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
+			
+			Paragraph p51 = new Paragraph();
+			p51.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_city() + ", "
 					+ AccountDetailrequest.getAcctDetails().get(0).getBranch_state()).addStyle(regularStyle));
 			p5.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			p51.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
 			logger.info("Para Y val " + paraY);
 			paraY -= 12;
 			document.add(p5);
+			document.add(p51);
 
 			Paragraph p6 = new Paragraph(
 					new Text(AccountDetailrequest.getAcctDetails().get(0).getCustomer_Zip()).addStyle(regularStyle));
-			p6.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
-			p6.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_Pin_code()).addStyle(regularStyle));
+			//p6.add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab()).add(new Tab());
+			
+			Paragraph p61=new Paragraph();
+			p61.add(new Text(AccountDetailrequest.getAcctDetails().get(0).getBranch_Pin_code()).addStyle(regularStyle));
 			p6.setFixedPosition(paraX, paraY, pageSize.getWidth());
+			p61.setFixedPosition(paraX+310, paraY, pageSize.getWidth());
+			
 			logger.info("Para Y val " + paraY);
 			paraY -= 30;
 			document.add(p6);
-
+			document.add(p61);
+			
 			Text label = new Text("Interest Certificate");
 			label.addStyle(boldStyle);
 			label.setUnderline(.8f, -5f);
@@ -224,8 +276,8 @@ public class PdfOperationImpl implements PdfOperations {
 					"Please find below confirmation of the Interest paid and Tax withheld/Tax Deducted at Source/Interest Collected towards "
 							+ "various Deposit/Loan accounts held under Cust ID : "
 							+ AccountDetailrequest.getAcctDetails().get(0).getCust_id() + " for the period "
-							+ AccountDetailrequest.getAcctDetails().get(0).getStart_date() + " to "
-							+ AccountDetailrequest.getAcctDetails().get(0).getEnd_date()).addStyle(regularStyle)
+							+ dateConvert(AccountDetailrequest.getAcctDetails().get(0).getStart_date()) + " to "
+							+ dateConvert(AccountDetailrequest.getAcctDetails().get(0).getEnd_date())).addStyle(regularStyle)
 									.setFixedPosition(paraX, paraY, pageSize.getWidth() - document.getRightMargin()));
 			paraY -= 30;
 			float[] columnWidth = { 2f };
@@ -243,14 +295,14 @@ public class PdfOperationImpl implements PdfOperations {
 					pageSize.getWidth() - document.getRightMargin() - document.getLeftMargin() - 30);
 			document.add(savingTableHeader);
 
-			float[] widths = { 0.08f, 0.20f, 0.20f, 0.20f };
+			float[] widths = { 0.10f, 0.20f, 0.20f, 0.20f };
 			Table savingTable = new Table(widths);
 
 			Cell headerRowCell1 = new Cell();
 			headerRowCell1.add("Sr. No ").addStyle(regularStyle);
 			headerRowCell1.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 			headerRowCell1.setTextAlignment(TextAlignment.CENTER);
-			headerRowCell1.setWidth(15.67f);
+			headerRowCell1.setWidth(35f);
 			Border border = new SolidBorder(Color.LIGHT_GRAY, 1);
 
 			headerRowCell1.setBorder(border);
@@ -316,8 +368,8 @@ public class PdfOperationImpl implements PdfOperations {
 
 						Cell snoCell = new Cell();
 						snoCell.add(serialNoSb++ + "").addStyle(regularStyle);
-						snoCell.setTextAlignment(TextAlignment.CENTER).setMarginRight(2);
-						snoCell.setWidth(15.67f);
+						snoCell.setTextAlignment(TextAlignment.CENTER);
+						snoCell.setWidth(35f);
 						snoCell.setBorder(border);
 
 						savingTable.addCell(snoCell);
@@ -361,6 +413,7 @@ public class PdfOperationImpl implements PdfOperations {
 						
 						
 
+						logger.info("inside footer event");
 						paraY -=tableHeight+20;
 						
 						savingTable.setFixedPosition(paraX + 20, paraY,
@@ -413,7 +466,7 @@ public class PdfOperationImpl implements PdfOperations {
 						emptyCell1.add("").addStyle(regularStyle);
 						emptyCell1.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 						emptyCell1.setBorder(border);
-						emptyCell1.setWidth(15.67f);
+						emptyCell1.setWidth(35f);
 						savingTable.addFooterCell(emptyCell1);
 
 						Cell totalCell2 = new Cell();
@@ -450,6 +503,9 @@ public class PdfOperationImpl implements PdfOperations {
 								pageSize.getWidth() - document.getRightMargin() - document.getLeftMargin() - 30);
 						
 						document.add(savingTable);
+						
+						FooterEventHandler footerHandler = new FooterEventHandler(document);
+						pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, footerHandler);
 						
 						
 						
@@ -500,7 +556,7 @@ public class PdfOperationImpl implements PdfOperations {
 			headerRowCell1Td.add("Sr. No ").addStyle(regularStyle);
 			headerRowCell1Td.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 			headerRowCell1Td.setTextAlignment(TextAlignment.CENTER);
-			headerRowCell1Td.setWidth(15.67f);
+			headerRowCell1Td.setWidth(35f);
 			//Border borderTd = new SolidBorder(Color.LIGHT_GRAY, 1);
 
 			headerRowCell1Td.setBorder(border);
@@ -561,7 +617,8 @@ public class PdfOperationImpl implements PdfOperations {
 
 						Cell snoCell = new Cell();
 						snoCell.add((int)serialNoTd++ + "").addStyle(regularStyle);
-						snoCell.setWidth(15.67f);
+						snoCell.setTextAlignment(TextAlignment.CENTER);
+						snoCell.setWidth(35f);
 						snoCell.setBorder(border);
 
 						tdTable.addCell(snoCell);
@@ -654,7 +711,7 @@ public class PdfOperationImpl implements PdfOperations {
 						emptyCell1.add("").addStyle(regularStyle);
 						emptyCell1.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 						emptyCell1.setBorder(border);
-						emptyCell1.setWidth(15.67f);
+						emptyCell1.setWidth(35f);
 						tdTable.addFooterCell(emptyCell1);
 
 						Cell totalCell2 = new Cell();
@@ -771,7 +828,7 @@ public class PdfOperationImpl implements PdfOperations {
 		headerRowCell1.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 		headerRowCell1.setTextAlignment(TextAlignment.CENTER);
 		Border border = new SolidBorder(Color.LIGHT_GRAY, 1);
-		headerRowCell1.setWidth(15.67f);
+		headerRowCell1.setWidth(35f);
 
 		headerRowCell1.setBorder(border);
 		savingTable.addHeaderCell(headerRowCell1);
@@ -808,7 +865,7 @@ public class PdfOperationImpl implements PdfOperations {
 			Cell snoCell = new Cell();
 			snoCell.addStyle(regularStyle);
 			snoCell.add((int)serialNo++ + "").addStyle(regularStyle).setTextAlignment(TextAlignment.CENTER);
-			snoCell.setWidth(15.67f);
+			snoCell.setWidth(35f);
 			snoCell.setBorder(border);
 			savingTable.addCell(snoCell);
 			
@@ -845,7 +902,7 @@ public class PdfOperationImpl implements PdfOperations {
 			emptyCell1.add("").addStyle(regularStyle);
 			emptyCell1.setBackgroundColor(Color.LIGHT_GRAY, 0.5f);
 			emptyCell1.setBorder(border);
-			emptyCell1.setWidth(15.67f);
+			emptyCell1.setWidth(135f);
 			savingTable.addFooterCell(emptyCell1);
 
 			Cell totalCell2 = new Cell();
@@ -905,4 +962,14 @@ public class PdfOperationImpl implements PdfOperations {
 		return acctDetails;
 	}
 
+	private String dateConvert(String dateToConvert) {
+		
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
+		DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH);
+		LocalDate ld = LocalDate.parse(dateToConvert, dtf);
+		String month_name = dtf2.format(ld);
+		System.out.println(month_name);
+		return month_name;
+	}
 }
